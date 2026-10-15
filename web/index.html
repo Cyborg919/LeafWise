@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#f5f4eb">
+  <meta name="description" content="Private, practical crop-health guidance from a leaf photo. Classify within 38 supported crop and disease labels using the bundled model.">
+  <title>Leafwise — Crop Health &amp; Care</title>
+  <link rel="icon" type="image/svg+xml" href="/assets/leafwise.svg">
+  <link rel="stylesheet" href="/assets/styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <a class="brand" href="#diagnose" aria-label="Leafwise home" data-view-link="diagnose">
+        <span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 40 40"><path d="M30.8 8.5C18.2 8 9.4 14.3 9.1 23.3c-.2 5.1 3.5 8.3 8.3 7.8 9.1-.9 13.4-10.1 13.4-22.6Z"/><path d="M10.5 30.2c3.7-6.8 8.3-11.3 16.3-16"/></svg></span>
+        <span class="brand-word">leafwise<span class="brand-period">.</span></span>
+      </a>
+      <nav class="main-nav" aria-label="Main navigation">
+        <button class="nav-item is-active" type="button" data-view-link="diagnose">Diagnose</button>
+        <button class="nav-item" type="button" data-view-link="library">Class library <span class="nav-count">38</span></button>
+        <button class="nav-item" type="button" data-view-link="history">My history</button>
+        <button class="nav-item" type="button" data-view-link="about">About</button>
+        <button class="nav-item" type="button" data-view-link="creator">Creator</button>
+      </nav>
+      <div class="top-status"><span class="status-dot"></span><span id="modelStatus">Model ready</span></div>
+    </header>
+
+    <main>
+      <section class="view is-active" id="view-diagnose" data-view="diagnose">
+        <div class="hero-intro">
+          <div>
+            <p class="eyebrow"><span class="eyebrow-line"></span> LEAF HEALTH, MADE CLEARER</p>
+            <h1>A calmer way to<br><em>read the leaf.</em></h1>
+            <p class="hero-copy">A photo-guided first look at supported crop conditions, with one practical place to start.</p>
+          </div>
+          <div class="hero-note"><span class="note-index">01 / 38</span><span>Built for the crops you grow.<br>Grounded in the model we have.</span></div>
+        </div>
+
+        <div class="diagnosis-layout">
+          <section class="upload-panel panel" aria-labelledby="uploadTitle">
+            <div class="panel-heading">
+              <div><p class="eyebrow small">YOUR LEAF</p><h2 id="uploadTitle">Start with a photo</h2></div>
+              <span class="step-mark">01</span>
+            </div>
+            <div class="dropzone" id="dropzone" role="button" tabindex="0" aria-label="Choose or drop a leaf photo">
+              <div class="drop-inner" id="dropPrompt">
+                <div class="upload-glyph" aria-hidden="true"><svg viewBox="0 0 48 48"><path d="M24 32V12m0 0-8 8m8-8 8 8"/><path d="M10 29v7a3 3 0 0 0 3 3h22a3 3 0 0 0 3-3v-7"/></svg></div>
+                <p class="drop-title">Drop a clear leaf photo here</p>
+                <p class="drop-subtitle">or browse from your device · JPEG, PNG, WebP · up to 10 MB</p>
+                <div class="upload-actions"><button class="button button-primary" type="button" id="browseButton">Choose photo <span aria-hidden="true">↗</span></button><button class="button button-quiet" type="button" id="cameraButton">Use camera</button></div>
+              </div>
+              <div class="photo-preview is-hidden" id="photoPreview">
+                <img id="previewImage" alt="Selected leaf photo preview">
+                <div class="preview-label"><span class="status-dot"></span><span id="previewName">Photo selected</span><button type="button" class="text-button" id="removePhoto">Remove</button></div>
+              </div>
+              <input type="file" id="fileInput" accept="image/jpeg,image/png,image/webp,image/bmp" class="visually-hidden">
+              <input type="file" id="cameraInput" accept="image/*" capture="environment" class="visually-hidden">
+            </div>
+            <div class="upload-tip"><span class="tip-mark">i</span><span>One leaf, good daylight, plain background. Photos aren't kept in history unless you opt in. Android temporarily holds a private copy until you remove it or close the app.</span></div>
+            <label class="save-consent"><input type="checkbox" id="saveToggle"><span class="custom-check" aria-hidden="true"></span><span><strong>Save this report and photo to My history</strong><small>Optional. Your storage and deletion details appear here before you save.</small></span></label>
+            <button class="button button-analyze" type="button" id="analyzeButton" disabled><span>Analyze leaf</span><span class="button-arrow" aria-hidden="true">→</span></button>
+            <p class="error-message is-hidden" id="uploadError" role="alert"></p>
+            <div class="loading-state is-hidden" id="loadingState" role="status"><span class="spinner"></span><span>Reading the leaf…</span><span class="loading-sub">This usually takes a few seconds.</span></div>
+          </section>
+
+          <section class="result-panel panel" id="resultPanel" aria-live="polite">
+            <div class="panel-heading">
+              <div><p class="eyebrow small">THE FIRST LOOK</p><h2 id="resultHeading">Your result, when you're ready</h2></div>
+              <span class="step-mark">02</span>
+            </div>
+            <div class="result-empty" id="resultEmpty">
+              <div class="empty-art" aria-hidden="true"><span class="art-ring ring-one"></span><span class="art-ring ring-two"></span><svg viewBox="0 0 180 180"><path d="M128 34c-43 0-77 22-79 59-1 23 16 38 38 35 31-4 48-40 41-94Z"/><path d="M49 129c14-28 35-49 66-70"/><path d="M90 95c15-5 25-4 37 1"/><path d="M76 111c6 12 6 20 2 31"/></svg></div>
+              <h3>Waiting for your leaf</h3>
+              <p>Choose one supported crop leaf to see a ranked model result and a source-linked care method.</p>
+              <div class="quiet-rule"></div>
+              <p class="tiny-note">A model score is a ranking, not a diagnosis.</p>
+            </div>
+            <div class="result-content is-hidden" id="resultContent">
+              <div class="result-topline"><span class="result-tag"><span class="status-dot"></span> TOP-RANKED CLASS</span><button type="button" class="text-button" id="newAnalysis">New photo</button></div>
+              <div class="primary-result"><div><p class="crop-label" id="resultCrop">—</p><h3 id="resultDisease">—</h3></div><div class="score-ring"><span id="scoreValue">—</span><small>MODEL<br>SCORE</small></div></div>
+              <p class="result-notice" id="resultNotice"></p>
+              <div class="ranked-results" id="rankedResults"></div>
+              <div class="care-card"><div class="care-heading"><span class="care-icon" aria-hidden="true">↗</span><div><p class="eyebrow small">ONE SUGGESTED METHOD</p><h4 id="careTitle">A sensible first step</h4></div></div><p id="oneMethod" class="one-method"></p></div>
+              <details class="detail-block" open><summary>Other steps &amp; prevention <span class="detail-chevron">⌄</span></summary><div id="careDetails"></div></details>
+              <div class="caution-box"><span class="caution-mark">!</span><p id="careCaution"></p></div>
+              <div class="source-list"><p class="eyebrow small">SOURCE NOTES</p><div id="careSources"></div></div>
+            </div>
+          </section>
+        </div>
+        <div class="bottom-note"><span class="leaf-mini">✳</span><span><strong>Keep a curious eye.</strong> This is an early clue, not a substitute for local crop advice.</span><button type="button" class="text-button" data-view-link="about">How the model works <span aria-hidden="true">→</span></button></div>
+      </section>
+
+      <section class="view" id="view-library" data-view="library">
+        <div class="page-intro"><div><p class="eyebrow"><span class="eyebrow-line"></span> SUPPORTED CLASSES</p><h1>Know the model's<br><em>field of view.</em></h1><p class="hero-copy">Browse every crop and condition the bundled classifier can rank.</p></div><div class="library-count"><strong id="classCount">38</strong><span>supported labels</span></div></div>
+        <div class="library-toolbar"><label class="search-box"><span aria-hidden="true">⌕</span><input type="search" id="classSearch" placeholder="Search crop or condition" aria-label="Search supported classes"></label><select id="cropFilter" aria-label="Filter by crop"><option value="">All crops</option></select><span class="toolbar-count" id="filteredCount">38 classes</span></div>
+        <div class="class-list" id="classList"></div>
+        <p class="page-footnote">This is a closed set. A photo outside these classes may still receive a result.</p>
+      </section>
+
+      <section class="view" id="view-history" data-view="history">
+        <div class="page-intro"><div><p class="eyebrow"><span class="eyebrow-line"></span> YOUR SAVED REPORTS</p><h1>A little history<br><em>helps you notice.</em></h1><p class="hero-copy">Only reports you chose to save appear here. Photos are never stored for unsaved analyses.</p><p class="retention-note" id="retentionNote"></p></div><button class="button button-quiet is-hidden" id="refreshHistory" type="button">Refresh history</button></div>
+        <div class="history-list" id="historyList"><div class="history-empty"><span class="empty-history-glyph">↗</span><h3>No saved reports yet</h3><p>Turn on “Save this report and photo” when you analyze a leaf to keep a report here.</p></div></div>
+      </section>
+
+      <section class="view" id="view-about" data-view="about">
+        <div class="page-intro"><div><p class="eyebrow"><span class="eyebrow-line"></span> HOW LEAFWISE WORKS</p><h1>Helpful clues.<br><em>Honest limits.</em></h1><p class="hero-copy">An open, self-hostable app built around a bundled ONNX model—not a paid third-party prediction API.</p></div><div class="model-seal"><span class="status-dot"></span> ONNX · 38 CLASSES</div></div>
+        <div class="about-grid"><article class="about-card"><span class="about-index">01</span><h2>One clear photo</h2><p>Choose a single leaf in good light. The web service processes it in memory; history and photo storage happen only if you opt in. The Android app runs on-device.</p></article><article class="about-card"><span class="about-index">02</span><h2>A ranked result</h2><p>The classifier compares the photo with its 38 supported crop/disease labels. The score helps rank those labels; it is not a calibrated probability.</p></article><article class="about-card"><span class="about-index">03</span><h2>A practical next step</h2><p>Care notes are bundled offline, link to agricultural sources, and favor cautious actions. Healthy classes receive maintenance advice, not a disease treatment.</p></article></div>
+        <div class="limits-card"><div class="limits-title"><span class="caution-mark">!</span><div><p class="eyebrow small">IMPORTANT LIMITS</p><h2>Use this as a first look</h2></div></div><ul><li>It is not a general plant identifier and has no “unknown plant” class.</li><li>Field photos, lighting, background, multiple leaves, or unsupported crops can cause mistakes.</li><li>The reported validation score comes from the source repository and cannot be independently reproduced because its original dataset is not included.</li><li>Confirm serious or uncertain symptoms with local agricultural extension. Do not apply chemicals based on this result alone.</li></ul></div>
+        <div class="api-card"><div><p class="eyebrow small">YOUR OWN FREE API</p><h2>Inspect the API</h2><p>Open the self-hosted API documentation for endpoints and example requests.</p></div><a class="button button-outline" href="/docs" target="_blank" rel="noopener">Open API docs <span aria-hidden="true">↗</span></a></div>
+      </section>
+      <section class="view" id="view-creator" data-view="creator">
+        <div class="page-intro">
+          <div>
+            <p class="eyebrow"><span class="eyebrow-line"></span> THE PERSON BEHIND LEAFWISE</p>
+            <h1>Meet the<br><em>creator.</em></h1>
+            <p class="hero-copy">A separate place for the project creator and direct contact links.</p>
+          </div>
+          <div class="model-seal"><span class="status-dot"></span> PROJECT CREATOR</div>
+        </div>
+        <section class="creator-profile" aria-labelledby="creatorTitle">
+          <div class="creator-mark" aria-hidden="true">VP</div>
+          <div class="creator-intro">
+            <p class="eyebrow small">LEAFWISE CREATOR</p>
+            <h2 id="creatorTitle">Vignesh P</h2>
+            <p>Building practical, accessible tools for plant care.</p>
+          </div>
+          <div class="creator-links">
+            <a href="https://www.instagram.com/vignesh_pgd/" target="_blank" rel="noopener noreferrer">Instagram · @vignesh_pgd <span aria-hidden="true">↗</span></a>
+            <a href="mailto:vigneshperingode352@gmail.com">vigneshperingode352@gmail.com</a>
+            <a href="mailto:cybrogofficial@gmail.com">cybrogofficial@gmail.com</a>
+          </div>
+        </section>
+      </section>
+    </main>
+    <footer class="app-footer"><span>LEAFWISE <span class="footer-dot">·</span> CROP HEALTH &amp; CARE</span><span>Bundled model · offline care notes · no paid inference API</span></footer>
+  </div>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script src="/assets/app.js" defer></script>
+</body>
+</html>

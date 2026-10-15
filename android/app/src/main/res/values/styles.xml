@@ -1,0 +1,11 @@
+<resources>
+    <style name="Theme.Leafwise" parent="android:style/Theme.Material.Light.NoActionBar">
+        <item name="android:fontFamily">sans</item>
+        <item name="android:colorAccent">#1F4D3A</item>
+        <item name="android:navigationBarColor">#F5F4EB</item>
+        <item name="android:statusBarColor">#F5F4EB</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:windowActionModeOverlay">true</item>
+        <item name="android:windowBackground">#F5F4EB</item>
+    </style>
+</resources>

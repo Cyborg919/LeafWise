@@ -1,0 +1,33 @@
+{
+  "task": "PlantVillage crop / leaf-disease classification",
+  "dataset": "PlantVillage (repository-reported; source datasets are not included)",
+  "classes": 38,
+  "supported_crops": [
+    "Apple",
+    "Blueberry",
+    "Cherry",
+    "Corn (maize)",
+    "Grape",
+    "Orange",
+    "Peach",
+    "Bell pepper",
+    "Potato",
+    "Raspberry",
+    "Soybean",
+    "Squash",
+    "Strawberry",
+    "Tomato"
+  ],
+  "input": "96 x 96 RGB",
+  "backbone": "MobileNetV3-Small (ImageNet-pretrained, frozen)",
+  "method": "Frozen-backbone feature extraction + trained classifier head, exported to ONNX",
+  "training_images": 5300,
+  "validation_images": 1140,
+  "validation_accuracy_percent": 90.09,
+  "validation_metric_note": "This is the accuracy reported by the original repository; the train/validation images are not bundled, so the metric cannot be independently reproduced from this ZIP.",
+  "model_size_mb": 4.36,
+  "inference_latency_ms_cpu_single_image": 1.5,
+  "runtime": "ONNX Runtime (CPU)",
+  "scope_warning": "Closed-set classifier with no unknown class. It always ranks among the 38 supported crop/disease labels and may misclassify unsupported crops, unrelated images, and real-world field photos. It is not a general plant-species identifier or a confirmed diagnosis.",
+  "notes": "int8 dynamic quantization shrank the model to 1.27 MB but collapsed accuracy to 2.8% (unsupported op handling), so the fp32 model is shipped. Static quantization with calibration data is a planned next step."
+}

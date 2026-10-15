@@ -1,0 +1,7 @@
+[tool.pyright]
+include = ["api", "tests"]
+extraPaths = ["."]
+venvPath = "."
+venv = ".venv"
+pythonVersion = "3.12"
+typeCheckingMode = "basic"
