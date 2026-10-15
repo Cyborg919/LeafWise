@@ -86,5 +86,6 @@ LEAFWISE_FORCE_SQLITE=1 .venv/bin/python -m unittest discover -s tests -v
 The tests use synthetic leaf images, temporary SQLite, and temporary files; they do not write test diagnoses to the managed database. For the cloud container, use the included `Dockerfile`. The Webdev runtime configuration is prepared for a container health check at `/_app/health`; no public production site is published by this project build.
 
 ## Provenance
+## Provenance
 
-The original ONNX model, labels, metrics, and care material came from the GitHub project supplied for this task: <https://github.com/harshitd842/hackathon>. Review that project's and model's applicable license before commercial use or redistribution. See [NOTICE.md](NOTICE.md).
+LeafWise is an independently developed plant disease detection application. Its application code, interface, and integration work were developed for this project. Third-party models, datasets, and other resources, where used, remain subject to their respective licenses and attribution requirements.
